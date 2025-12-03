@@ -46,7 +46,7 @@ pin_seed <- function(fun, args, seed) {
 do_fcps <- function(truth, seed) {
 
   # Randomly assign a class to each cell
-  res <- sample(fd) 
+  res <- sample(truth) 
   
   res_char <- res %>% as.character()
   
