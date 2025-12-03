@@ -17,7 +17,7 @@ parser$add_argument('--data.matrix',
                     help='gz-compressed textfile containing the comma-separated data to be clustered.')
 parser$add_argument('--data.true_labels',
                     type="character",
-                    help='gz-compressed textfile with the true labels; used to select a range of ks.')
+                    help='gz-compressed textfile with the true labels.')
 parser$add_argument('--seed',
                     type="integer",
                     help='Random seed',
@@ -43,26 +43,30 @@ pin_seed <- function(fun, args, seed) {
   eval(as.call(c(fun, args)))
 }
 
-do_fcps <- function(data, seed) {
-  
-  # Number of cells
-  n_cells <- nrow(data)
-  
-  # Define some fake cell types
-  cell_types_int <- length(colnames(data))
-  
-  # Randomly assign a class to each cell
-  res <- sample(cell_types, size = n_cells, replace = FALSE)
+do_fcps <- function(truth, seed) {
 
-  return(res)
+  # Randomly assign a class to each cell
+  res <- sample(fd) 
+  
+  res_char <- res %>% as.character()
+  
+  res_final <- paste0(res_char, ".0")
+
+  return(res_final)
   
 }
 
 truth <- load_labels(args[['data.true_labels']])
 
-res <- do_fcps(data = load_dataset(args[['data.matrix']]), seed = args$seed)
+res <- do_fcps(truth = truth, seed = args$seed)
 
-gz <- gzfile(file.path(args[['output_dir']], paste0(args[['name']], ".labels.gz")), "w")
-write.table(file = gz, res, col.names = TRUE, row.names = FALSE, sep = ",")
-close(gz)
+outfile <- file.path(args[['output_dir']], paste0(args[['name']], "_predicted_labels.txt"))
+write.table(file = outfile, res, col.names = FALSE, row.names = FALSE, quote = FALSE)
+
+
+# TEST
+# truth <- read.table(gzfile("Documents/courses/Benchmarking/data/true_labs.txt.gz"), header = FALSE)$V1
+# res <- do_fcps(truth = truth, seed = 66)
+# outfile <- file.path("Downloads", "Bla_predicted_labels.txt")
+# write.table(file = outfile, res, col.names = FALSE, row.names = FALSE, quote = FALSE)
 
