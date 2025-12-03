@@ -49,7 +49,7 @@ do_fcps <- function(data, seed) {
   n_cells <- nrow(data)
   
   # Define some fake cell types
-  cell_types <- colnames(data)
+  cell_types_int <- length(colnames(data))
   
   # Randomly assign a class to each cell
   res <- sample(cell_types, size = n_cells, replace = FALSE)

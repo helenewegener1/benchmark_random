@@ -56,7 +56,6 @@ truth <- load_labels(args[['data.true_labels']])
 
 res <- do_fcps(data = truth, seed = args$seed)
 
-gz <- gzfile(file.path(args[['output_dir']], paste0(args[['name']], "_predicted_labels.txt")), "w")
-write.table(file = gz, res, col.names = TRUE, row.names = FALSE, sep = ",")
-close(gz)
+outfile <- file.path(args[['output_dir']], paste0(args[['name']], "_predicted_labels.txt"))
+write.table(file = outfile, res, col.names = FALSE, row.names = FALSE, quote = FALSE)
 
